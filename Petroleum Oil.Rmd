@@ -1,0 +1,96 @@
+---
+title: "Petroeum oil"
+author: "Efoli Matthew"
+date: "2/19/2021"
+output: html_document
+---
+
+# Objective of the data visualization
+Make a bar plot with SN on the y-axis, compounds on the x-axis, SD as the error bars.  
+separating the isomers by colours for each distinctive compounds.
+Expand the y-axis to about 350. 
+
+Note: The chart is flipped.
+
+
+## Import data
+
+The data set has been cleaned in Microsoft Excel. 
+A tip: It is easier to clean your data from the source to which it is from. Although, I would still perform some basic check with my  favourite snippets of codes.
+
+```{r import data, echo=FALSE}
+#import data
+Barplot2 <- read.csv("C:/Users/test/Documents/Github projects/petroleumoil/Barplotinput2.csv", header = T)
+# structure of data
+str(Barplot2)
+Barplot3 <- Barplot2[, 1:10] # doing away with the last 3 columns.
+str(Barplot3)
+# check for missing values
+sum(is.na(Barplot3))
+Barplot3[,10]
+typeof(Barplot3[ ,10])
+```
+
+## Adding the distinct colouring
+
+The colours  were added to distinguish the chemical compounds.
+
+```{r addcolours}
+cols <- c("C10H8" = "darkorange2", "C11H10" = "dodgerblue2", "C12H8" = "firebrick2", "C12H10" = "darkgreen", "C12H12" = "turquoise3", "C13H10" = "gray", "C13H12" = "violet", "C13H14" = "yellowgreen", "C14H10" = "blue4", "C14H12" = "red", "C14H14" = "peru", "C14H16" = "darkolivegreen4", "C12H12N2" = "slateblue", "C13H12O" = "deeppink4", "C15H12" = "chocolate", "C15H14" = "steelblue2", "C15H16" = "grey50", "C13H10S" = "yellow", "C16H10" = "hotpink", "C16H12" = "navy", "C16H14" = "maroon", "C17H14" = "green1", "C18H12" = "lightcoral", "C18H18" = "slateblue1", "C17H14O" = "magenta1", "C20H12" = "goldenrod2", "C22H12" = "springgreen4", "C22H14" = "black")
+```
+
+### load necessary packages
+```{r loadpackages}
+library(ggplot2)
+library(ggpubr)
+```
+
+
+## The visualization
+
+```{r Calvert, echo=FALSE}
+Calvert <- ggplot(Barplot3, aes(x=S.N, y= Calvert, fill= Compound)) + geom_bar(stat = "identity", position = position_dodge(0.9))+ geom_errorbar(aes(ymin=Calvert-sd1, ymax=Calvert+sd1), width=0.15, size=0.5, position = position_dodge(0.9),alpha=0.3) + coord_flip() + theme(axis.title.y = element_blank(), legend.position = "none") + scale_fill_manual(values = cols) + expand_limits(y = c(1, 350))
+Calvert
+```
+
+```{r Macondo}
+Macondo <- ggplot(Barplot3, aes(x=S.N, y= Macondo, fill= Compound)) + geom_bar(stat = "identity", position = position_dodge(0.9))+ geom_errorbar(aes(ymin=Macondo-sd1, ymax=Macondo+sd1), width=0.15, size=0.5, position = position_dodge(0.9),alpha=0.3) + coord_flip() + theme(axis.title.y = element_blank(), legend.position = "none") + scale_fill_manual(values = cols) + expand_limits(y = c(1, 350)) 
+
+Macondo
+```
+
+```{r Duri}
+Duri <- ggplot(Barplot3, aes(x=S.N, y= Duri, fill= Compound)) + geom_bar(stat = "identity", position = position_dodge(0.9))+ geom_errorbar(aes(ymin=Duri-sd1, ymax=Duri+sd1), width=0.15, size=0.5, position = position_dodge(0.9),alpha=0.3) + coord_flip() + theme(axis.title.y = element_blank(), legend.position = "none") + scale_fill_manual(values = cols) + expand_limits(y = c(1, 350))
+Duri
+```
+
+
+```{r SanArdo}
+SanArdo <- ggplot(Barplot3, aes(x=S.N, y= SanArdo, fill= Compound)) + geom_bar(stat = "identity", position = position_dodge(0.9))+ geom_errorbar(aes(ymin=SanArdo-sd1, ymax=SanArdo+sd1), width=0.15, size=0.5, position = position_dodge(0.9),alpha=0.3) + coord_flip() + theme(axis.title.y = element_blank()) + scale_fill_manual(values = cols) + expand_limits(y = c(1, 350))
+SanArdo
+```
+
+```{r themes}
+mytheme <- theme(panel.grid = element_blank(),panel.background = element_rect(fill = "white"),axis.text.y = element_blank(), axis.ticks.y.left = element_blank(), axis.line.x = element_line(colour = "black", size = 0.2),axis.line.y = element_line(colour = "black", size = 0.2))
+
+mytheme2 <- theme(panel.grid = element_blank(),panel.background = element_rect(fill = "white"),axis.text.y = element_blank(), axis.ticks.y.left = element_blank(), axis.line.x = element_line(colour = "black", size = 0.2)) #this theme has no y-axis note.
+```
+
+```{r EPAdataviz2}
+par(mfrow=c(1,4)) #put the code in a 1 row, 4 columns format
+Calvert + mytheme
+Macondo + mytheme2
+Duri + mytheme2
+SanArdo + mytheme2
+
+Ca <- Calvert + mytheme
+Mac <- Macondo + mytheme2
+Dur <- Duri + mytheme2
+San <- SanArdo + mytheme2
+ggarrange(Ca, Mac, Dur, San, ncol = 4, nrow = 1)
+
+
+ggsave("EDA7.pdf", width=20, height = 10)  #save the code in a PDF file 
+ggsave("EDA8.TIFF", width=30, height = 25) #save the code as a TIFF file
+```
+
